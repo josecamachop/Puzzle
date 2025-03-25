@@ -1,0 +1,332 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Third example: continuum between ARDICO and ACORDI. Arteaga et al. Solving the Puzzle</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2025-03-25"><meta name="DC.source" content="Example3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Third example: continuum between ARDICO and ACORDI. Arteaga et al. Solving the Puzzle</h1><!--introduction--><p>simulation of multivariate data with control over the structure of columns and rows using two-sided orthogonal Procrustes.</p><p>Dependencies:</p><pre class="language-matlab">- MEDA Toolbox <span class="string">v1.7</span> <span class="string">at</span> <span class="string">https://github.com/codaslab/MEDA-Toolbox</span>
+</pre><p>designed by: Fransciso Arteaga (<a href="mailto:francisco.arteaga@ucv.es">francisco.arteaga@ucv.es</a>)</p><p>coded by: Jose Camacho (<a href="mailto:josecamacho@ugr.es">josecamacho@ugr.es</a>)</p><p>last modification: 25/Mar/2025</p><p>Copyright (C) 2024</p><p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p><p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p><p>You should have received a copy of the GNU General Public License along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Example matrix</a></li><li><a href="#2">Continuum for 0.25 and 0.75</a></li><li><a href="#3">Validation</a></li><li><a href="#4">For a range of values</a></li></ul></div><h2 id="1">Example matrix</h2><pre class="codeinput">clear
+close <span class="string">all</span>
+clc
+
+Y = [0.706	1.765	-1.267	-0.217	-0.121
+1.347	0.711	0.586	1.524	1.280
+-0.707	0.267	-0.325	-0.862	-1.504
+-0.227	0.644	0.490	0.323	0.179
+-0.577	-0.850	-0.064	-1.455	-1.037
+0.532	0.156	-0.380	0.074	1.521
+1.442	0.631	-1.220	0.574	-1.135
+0.067	-1.047	-0.188	0.071	0.216
+-1.063	-0.964	2.239	-1.305	0.574
+-1.519	-1.312	0.129	1.274	0.026]
+
+C = [1.0	0.6	0.1	0.4	-0.3
+0.6	1.0	-0.4	0.0	-0.6
+0.1	-0.4	1.0	0.1	0.6
+0.4	0.0	0.1	1.0	0.1
+-0.3	-0.6	0.6	0.1	1.0]
+</pre><pre class="codeoutput">
+Y =
+
+    0.7060    1.7650   -1.2670   -0.2170   -0.1210
+    1.3470    0.7110    0.5860    1.5240    1.2800
+   -0.7070    0.2670   -0.3250   -0.8620   -1.5040
+   -0.2270    0.6440    0.4900    0.3230    0.1790
+   -0.5770   -0.8500   -0.0640   -1.4550   -1.0370
+    0.5320    0.1560   -0.3800    0.0740    1.5210
+    1.4420    0.6310   -1.2200    0.5740   -1.1350
+    0.0670   -1.0470   -0.1880    0.0710    0.2160
+   -1.0630   -0.9640    2.2390   -1.3050    0.5740
+   -1.5190   -1.3120    0.1290    1.2740    0.0260
+
+
+C =
+
+    1.0000    0.6000    0.1000    0.4000   -0.3000
+    0.6000    1.0000   -0.4000         0   -0.6000
+    0.1000   -0.4000    1.0000    0.1000    0.6000
+    0.4000         0    0.1000    1.0000    0.1000
+   -0.3000   -0.6000    0.6000    0.1000    1.0000
+
+</pre><h2 id="2">Continuum for 0.25 and 0.75</h2><pre class="codeinput">X025 = afamily(C,Y,<span class="string">'Method'</span>,<span class="string">'Continuum'</span>,<span class="string">'Gamma'</span>,0.25)
+
+X075 = afamily(C,Y,<span class="string">'Method'</span>,<span class="string">'Continuum'</span>,<span class="string">'Gamma'</span>,0.75)
+</pre><pre class="codeoutput">Method is Continuum for Gamma = 2.500000e-01
+
+X025 =
+
+    0.0543    1.6725   -0.6135   -0.8000   -1.1717
+    2.0971    0.9921    0.0421    1.0569   -0.1091
+   -1.2894   -0.1271   -0.7323   -1.1710    0.2944
+    0.2498    0.6538    0.0357    0.0736    0.6353
+   -1.2077   -1.2083    0.1366   -1.1349    0.0696
+    0.6888    0.5055    0.9697    0.5659   -0.8698
+    0.4270    0.4297   -1.7856   -0.3744   -1.3231
+   -0.0667   -0.8933    0.2142    0.5332   -0.3684
+   -0.0520   -1.1748    1.9557   -0.5964    1.8816
+   -0.9004   -0.8492   -0.2241    1.8469    0.9611
+
+Method is Continuum for Gamma = 7.500000e-01
+
+X075 =
+
+    0.0251    1.6901   -0.6080   -0.7764   -1.1915
+    2.1242    0.9737    0.0275    1.0550   -0.1112
+   -1.2951   -0.1358   -0.7275   -1.1723    0.2819
+    0.2461    0.6430    0.0434    0.0818    0.6156
+   -1.2093   -1.2105    0.1249   -1.1375    0.0858
+    0.6610    0.5383    0.9735    0.5871   -0.8618
+    0.4621    0.4167   -1.8059   -0.3989   -1.3149
+   -0.0593   -0.8809    0.2114    0.5200   -0.3459
+   -0.0527   -1.2034    1.9376   -0.5772    1.8881
+   -0.9014   -0.8305   -0.1785    1.8183    0.9539
+
+</pre><h2 id="3">Validation</h2><pre class="codeinput">MSE_025 = norm(Y-X025,<span class="string">'fro'</span>)^2/prod(size(Y))
+MSGMD_025 = norm(Y*Y'-X025*X025',<span class="string">'fro'</span>)^2/(size(Y,1)^2)
+MSCD_025 = norm(cov(X025)-C,<span class="string">'fro'</span>)^2/prod(size(C))
+MSDD_025 = norm(dist(Y').^2-dist(X025').^2,<span class="string">'fro'</span>)^2/(size(Y,1)*(size(Y,1)-1)/2)
+
+MSE_075 = norm(Y-X075,<span class="string">'fro'</span>)^2/prod(size(Y))
+MSGMD_075 = norm(Y*Y'-X075*X075',<span class="string">'fro'</span>)^2/(size(Y,1)^2)
+MSCD_075 = norm(cov(X075)-C,<span class="string">'fro'</span>)^2/prod(size(C))
+MSDD_075 = norm(dist(Y').^2-dist(X075').^2,<span class="string">'fro'</span>)^2/(size(Y,1)*(size(Y,1)-1)/2)
+</pre><pre class="codeoutput">
+MSE_025 =
+
+    0.5654
+
+
+MSGMD_025 =
+
+    0.0055
+
+
+MSCD_025 =
+
+   3.0034e-05
+
+
+MSDD_025 =
+
+    0.0983
+
+
+MSE_075 =
+
+    0.5666
+
+
+MSGMD_075 =
+
+   6.0721e-04
+
+
+MSCD_075 =
+
+   2.6997e-04
+
+
+MSDD_075 =
+
+    0.0109
+
+</pre><h2 id="4">For a range of values</h2><pre class="codeinput">MSE = [];
+MSGMD = [];
+MSCD = [];
+MSDD = [];
+<span class="keyword">for</span> gamma = 0:0.1:1
+    X = afamily(C,Y,<span class="string">'Method'</span>,<span class="string">'Continuum'</span>,<span class="string">'Gamma'</span>,gamma);
+    MSE = [MSE norm(Y-X,<span class="string">'fro'</span>)^2/prod(size(Y))];
+    MSGMD = [MSGMD norm(Y*Y'-X*X',<span class="string">'fro'</span>)^2/(size(Y,1)^2)];
+    MSCD = [MSCD norm(cov(X)-C,<span class="string">'fro'</span>)^2/prod(size(C))];
+    MSDD = [MSDD norm(dist(Y').^2-dist(X').^2,<span class="string">'fro'</span>)^2/(size(Y,1)*(size(Y,1)-1)/2)];
+<span class="keyword">end</span>
+
+plotVec(MSE,<span class="string">'XYLabel'</span>, {<span class="string">'Gamma'</span>,<span class="string">'MSE'</span>}, <span class="string">'EleLabel'</span>, 0:0.1:1, <span class="string">'PlotType'</span>, <span class="string">'Lines'</span>);
+axis([0 1 0.56 0.57])
+saveas(gcf,<span class="string">'Fig/MSE.jpg'</span>,<span class="string">'jpg'</span>)
+
+plotVec(MSGMD', <span class="string">'XYLabel'</span>, {<span class="string">'Gamma'</span>,<span class="string">'FDD'</span>}, <span class="string">'EleLabel'</span>, 0:0.1:1, <span class="string">'PlotType'</span>, <span class="string">'Lines'</span>);
+saveas(gcf,<span class="string">'Fig/MSGMD.jpg'</span>,<span class="string">'jpg'</span>)
+
+plotVec(MSCD', <span class="string">'XYLabel'</span>, {<span class="string">'Gamma'</span>,<span class="string">'MSCD'</span>}, <span class="string">'EleLabel'</span>, 0:0.1:1, <span class="string">'PlotType'</span>, <span class="string">'Lines'</span>);
+saveas(gcf,<span class="string">'Fig/MSCD.jpg'</span>,<span class="string">'jpg'</span>)
+
+plotVec(MSDD', <span class="string">'XYLabel'</span>, {<span class="string">'Gamma'</span>,<span class="string">'MSDD'</span>}, <span class="string">'EleLabel'</span>, 0:0.1:1, <span class="string">'PlotType'</span>, <span class="string">'Lines'</span>);
+saveas(gcf,<span class="string">'Fig/MSDD.jpg'</span>,<span class="string">'jpg'</span>)
+</pre><pre class="codeoutput">Method is Continuum for Gamma = 0
+Method is Continuum for Gamma = 1.000000e-01
+Method is Continuum for Gamma = 2.000000e-01
+Method is Continuum for Gamma = 3.000000e-01
+Method is Continuum for Gamma = 4.000000e-01
+Method is Continuum for Gamma = 5.000000e-01
+Method is Continuum for Gamma = 6.000000e-01
+Method is Continuum for Gamma = 7.000000e-01
+Method is Continuum for Gamma = 8.000000e-01
+Method is Continuum for Gamma = 9.000000e-01
+Method is Continuum for Gamma = 1
+</pre><img vspace="5" hspace="5" src="Example3_01.png" alt=""> <img vspace="5" hspace="5" src="Example3_02.png" alt=""> <img vspace="5" hspace="5" src="Example3_03.png" alt=""> <img vspace="5" hspace="5" src="Example3_04.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Third example: continuum between ARDICO and ACORDI. Arteaga et al. Solving the Puzzle
+% simulation of multivariate data with control over the structure of 
+% columns and rows using two-sided orthogonal Procrustes.
+%
+% Dependencies: 
+%
+%   - MEDA Toolbox v1.7 at https://github.com/codaslab/MEDA-Toolbox  
+%
+% designed by: Fransciso Arteaga (francisco.arteaga@ucv.es)   
+%
+% coded by: Jose Camacho (josecamacho@ugr.es)   
+%
+% last modification: 25/Mar/2025
+%
+% Copyright (C) 2024
+% 
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+%% Example matrix
+
+clear
+close all
+clc
+
+Y = [0.706	1.765	-1.267	-0.217	-0.121
+1.347	0.711	0.586	1.524	1.280
+-0.707	0.267	-0.325	-0.862	-1.504
+-0.227	0.644	0.490	0.323	0.179
+-0.577	-0.850	-0.064	-1.455	-1.037
+0.532	0.156	-0.380	0.074	1.521
+1.442	0.631	-1.220	0.574	-1.135
+0.067	-1.047	-0.188	0.071	0.216
+-1.063	-0.964	2.239	-1.305	0.574
+-1.519	-1.312	0.129	1.274	0.026]
+
+C = [1.0	0.6	0.1	0.4	-0.3
+0.6	1.0	-0.4	0.0	-0.6
+0.1	-0.4	1.0	0.1	0.6
+0.4	0.0	0.1	1.0	0.1
+-0.3	-0.6	0.6	0.1	1.0]
+
+
+%% Continuum for 0.25 and 0.75
+
+X025 = afamily(C,Y,'Method','Continuum','Gamma',0.25)
+
+X075 = afamily(C,Y,'Method','Continuum','Gamma',0.75)
+
+
+%% Validation
+
+MSE_025 = norm(Y-X025,'fro')^2/prod(size(Y))
+MSGMD_025 = norm(Y*Y'-X025*X025','fro')^2/(size(Y,1)^2)
+MSCD_025 = norm(cov(X025)-C,'fro')^2/prod(size(C))
+MSDD_025 = norm(dist(Y').^2-dist(X025').^2,'fro')^2/(size(Y,1)*(size(Y,1)-1)/2)
+
+MSE_075 = norm(Y-X075,'fro')^2/prod(size(Y))
+MSGMD_075 = norm(Y*Y'-X075*X075','fro')^2/(size(Y,1)^2)
+MSCD_075 = norm(cov(X075)-C,'fro')^2/prod(size(C))
+MSDD_075 = norm(dist(Y').^2-dist(X075').^2,'fro')^2/(size(Y,1)*(size(Y,1)-1)/2)
+
+
+%% For a range of values
+
+MSE = [];
+MSGMD = [];
+MSCD = [];
+MSDD = [];
+for gamma = 0:0.1:1
+    X = afamily(C,Y,'Method','Continuum','Gamma',gamma);
+    MSE = [MSE norm(Y-X,'fro')^2/prod(size(Y))];
+    MSGMD = [MSGMD norm(Y*Y'-X*X','fro')^2/(size(Y,1)^2)];
+    MSCD = [MSCD norm(cov(X)-C,'fro')^2/prod(size(C))];
+    MSDD = [MSDD norm(dist(Y').^2-dist(X').^2,'fro')^2/(size(Y,1)*(size(Y,1)-1)/2)];
+end
+
+plotVec(MSE,'XYLabel', {'Gamma','MSE'}, 'EleLabel', 0:0.1:1, 'PlotType', 'Lines');
+axis([0 1 0.56 0.57])
+saveas(gcf,'Fig/MSE.jpg','jpg')
+
+plotVec(MSGMD', 'XYLabel', {'Gamma','FDD'}, 'EleLabel', 0:0.1:1, 'PlotType', 'Lines');
+saveas(gcf,'Fig/MSGMD.jpg','jpg')
+
+plotVec(MSCD', 'XYLabel', {'Gamma','MSCD'}, 'EleLabel', 0:0.1:1, 'PlotType', 'Lines');
+saveas(gcf,'Fig/MSCD.jpg','jpg')
+
+plotVec(MSDD', 'XYLabel', {'Gamma','MSDD'}, 'EleLabel', 0:0.1:1, 'PlotType', 'Lines');
+saveas(gcf,'Fig/MSDD.jpg','jpg')
+##### SOURCE END #####
+--></body></html>
